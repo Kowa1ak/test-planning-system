@@ -1,0 +1,42 @@
+.members-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 8px 0;
+  flex-wrap: wrap;
+}
+.members-title {
+  color: #bdbdbd;
+  font-size: 1rem;
+  margin-right: 6px;
+}
+.members-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.member-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #23272f;
+  color: #BEADF6;
+  font-size: 1.3rem;
+  border: 2px solid #4787FF;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  line-height: 0;
+  padding: 0;
+}
+.member-avatar mat-icon {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  line-height: 1;
+}

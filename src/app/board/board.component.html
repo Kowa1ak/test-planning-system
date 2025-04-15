@@ -1,0 +1,485 @@
+<div class="board-container">
+  <ng-container *ngFor="let col of columns">
+    <div
+      class="column"
+      cdkDropList
+      [cdkDropListData]="getColumnTasks(col.key)"
+      [cdkDropListConnectedTo]="getConnectedDropLists(col.key)"
+      (cdkDropListDropped)="drop($event)"
+      [id]="col.key + 'List'"
+    >
+      <div class="card">
+        <div class="card-header">
+          <h3>{{ col.label }}</h3>
+          <mat-icon
+            (click)="toggleColumnClosed(col.key)"
+            style="cursor: pointer"
+            >settings</mat-icon
+          >
+        </div>
+        <div
+          *ngFor="let task of getColumnTasks(col.key); let i = index"
+          cdkDrag
+          class="task"
+          (click)="openTaskModal(col.key, i)"
+          [class.column-closed]="isColumnClosed(col.key)"
+        >
+          <div class="task-labels-row" *ngIf="task.labelColors?.length">
+            <span
+              *ngFor="let color of task.labelColors"
+              class="task-label-color"
+              [style.background]="color"
+            ></span>
+          </div>
+          {{ task.title }}
+        </div>
+        <button
+          class="add-task-btn"
+          (click)="addSampleTask(col.key)"
+          *ngIf="!isColumnClosed(col.key)"
+        >
+          <mat-icon>add</mat-icon> Добавить задачу
+        </button>
+      </div>
+    </div>
+  </ng-container>
+  <div class="column">
+    <div class="card card-add-column">
+      <ng-container *ngIf="!addingColumn">
+        <button class="column-add-btn-board" (click)="showAddColumnInput()">
+          <mat-icon>add</mat-icon>
+          <span>Создать колонку</span>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="addingColumn">
+        <input
+          class="column-add-input"
+          [(ngModel)]="newColumnName"
+          placeholder="Название колонки"
+          (keydown.enter)="confirmAddColumn()"
+          (blur)="confirmAddColumn()"
+          autofocus
+        />
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно добавления/просмотра задачи -->
+<div
+  *ngIf="addTaskModalOpen"
+  class="modal-overlay"
+  (click)="closeAddTaskModal()"
+>
+  <div
+    class="modal-content modal-content-flex"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-main">
+      <h3 *ngIf="!editTaskMode">Добавить задачу</h3>
+      <input
+        class="modal-input"
+        type="text"
+        [(ngModel)]="newTaskTitle"
+        placeholder="Название"
+        autofocus
+      />
+      <!-- Колонки всегда видимы -->
+      <div class="columns-list">
+        <span class="columns-list-title">Колонки:</span>
+        <span
+          *ngFor="let col of columns"
+          class="column-chip"
+          [class.selected]="col.key === newTaskColumn"
+          (click)="selectColumn(col.key)"
+          [class.clickable]="editTaskMode || !editTaskMode"
+        >
+          {{ col.label }}
+        </span>
+      </div>
+      <!-- Добавлено: Выбор приоритета -->
+      <div class="priority-list">
+        <span class="priority-list-title">Приоритет:</span>
+        <span
+          *ngFor="let prio of priorities"
+          class="priority-chip"
+          [class.selected]="prio.key === newTaskPriority"
+          (click)="selectPriority(prio.key)"
+        >
+          {{ prio.label }}
+        </span>
+      </div>
+      <!-- Добавлено: Due Date -->
+      <div class="due-date-section" style="position: relative">
+        <span class="due-date-title">Due Date:</span>
+        <button
+          class="date-picker-btn"
+          type="button"
+          (click)="openDatePicker(dateInput)"
+        >
+          <mat-icon>calendar_today</mat-icon>
+          <span>
+            {{
+              newTaskDueDate
+                ? (newTaskDueDate | date : "dd.MM.yyyy")
+                : "Select Date"
+            }}
+          </span>
+        </button>
+        <input
+          #dateInput
+          type="date"
+          [value]="newTaskDueDate"
+          (change)="onDateChange($event)"
+          style="
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            height: 0;
+          "
+          tabindex="-1"
+        />
+      </div>
+      <!-- Метка -->
+      <div
+        class="label-section"
+        *ngIf="selectedLabelColors.length"
+        style="display: flex; align-items: center; gap: 8px; margin: 8px 0"
+      >
+        <span class="label-title">Метки:</span>
+        <span
+          *ngFor="let color of selectedLabelColors"
+          class="label-color-box"
+          [style.background]="color"
+        ></span>
+      </div>
+
+      <!-- Участники -->
+      <div class="members-section">
+        <span class="members-title">Участники:</span>
+        <div class="members-list">
+          <ng-container *ngFor="let member of taskMembers">
+            <span class="member-avatar" matTooltip="{{ member.name }}">
+              <mat-icon>person</mat-icon>
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Вложения -->
+      <div class="attachments-section" *ngIf="attachments.length">
+        <span class="attachments-title">Вложения:</span>
+        <div class="attachments-list">
+          <div class="attachment-item" *ngFor="let att of attachments">
+            <mat-icon>attach_file</mat-icon>
+            <span class="attachment-name">{{ att.name }}</span>
+            <button
+              class="attachment-remove-btn"
+              (click)="removeAttachment(att)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Чеклисты -->
+      <div *ngFor="let cl of checklists" class="checklist-block">
+        <div class="checklist-header-row">
+          <span class="checklist-title">{{ cl.title }}</span>
+          <span class="checklist-header-actions">
+            <button
+              class="checklist-header-btn"
+              (click)="toggleHideChecked(cl)"
+            >
+              <mat-icon>{{
+                hiddenChecked[cl.title] ? "visibility_off" : "visibility"
+              }}</mat-icon>
+              {{
+                hiddenChecked[cl.title]
+                  ? "Показать отмеченные"
+                  : "Скрыть отмеченные"
+              }}
+            </button>
+            <button
+              class="checklist-header-btn delete"
+              (click)="removeChecklist(cl)"
+            >
+              <mat-icon>delete</mat-icon>
+              Удалить
+            </button>
+          </span>
+        </div>
+        <div class="checklist-progress-bar">
+          <div
+            class="checklist-progress-bar-inner"
+            [style.width.%]="getChecklistProgress(cl)"
+          ></div>
+          <span class="checklist-progress-label"
+            >{{ getChecklistProgress(cl) }}%</span
+          >
+        </div>
+        <div class="checklist-items">
+          <div
+            class="checklist-item"
+            *ngFor="let item of cl.items"
+            [class.checked]="item.checked"
+            [class.hidden]="hiddenChecked[cl.title] && item.checked"
+            (mouseenter)="itemMouseEnter(item)"
+            (mouseleave)="itemMouseLeave(item)"
+          >
+            <span
+              class="checklist-checkbox"
+              [class.checked]="item.checked"
+              (click)="toggleChecklistItem(cl, item)"
+            ></span>
+            <span class="checklist-item-title" [class.checked]="item.checked">{{
+              item.title
+            }}</span>
+            <button
+              class="checklist-item-delete-btn"
+              *ngIf="isItemHovered(item)"
+              (click)="removeChecklistItem(cl, item); $event.stopPropagation()"
+              title="Удалить"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="checklist-add-row">
+          <input
+            class="checklist-add-input"
+            [(ngModel)]="newChecklistItems[cl.title]"
+            placeholder="Добавить элемент"
+            (keydown.enter)="addChecklistItem(cl); $event.preventDefault()"
+          />
+          <button class="checklist-add-btn" (click)="addChecklistItem(cl)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="desc-header">
+        <mat-icon class="desc-icon">notes</mat-icon>
+        <span>Описание</span>
+      </div>
+      <div class="desc-input-wrapper">
+        <textarea
+          *ngIf="descInputFocused || !newTaskDesc"
+          class="desc-input"
+          [(ngModel)]="newTaskDesc"
+          placeholder="Добавьте описание..."
+          autocomplete="off"
+          (focus)="descInputFocused = true"
+          (blur)="descInputFocused = false"
+          (input)="autoGrowDesc($event)"
+          #descArea
+          [attr.data-autogrow]="descInputFocused"
+        ></textarea>
+        <div
+          *ngIf="!descInputFocused && newTaskDesc"
+          class="desc-display"
+          [class.placeholder]="!newTaskDesc"
+          [innerHTML]="renderedMarkdown"
+          (click)="onDescDisplayClick(descArea?.nativeElement)"
+        ></div>
+      </div>
+
+      <!-- Блок комментариев -->
+      <div class="desc-header">
+        <mat-icon class="desc-icon">notes</mat-icon>
+        <span>Комментарии</span>
+      </div>
+      <div class="desc-input-wrapper">
+        <textarea
+          class="comment-input desc-input"
+          [(ngModel)]="newCommentText"
+          placeholder="Оставьте комментарий..."
+          rows="2"
+          (keydown.enter)="addComment(); $event.preventDefault()"
+        ></textarea>
+      </div>
+      <div class="comments-list">
+        <div class="comment-item" *ngFor="let comment of comments">
+          <span class="comment-avatar">
+            <mat-icon>person</mat-icon>
+          </span>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-username">{{ comment.user }}</span>
+              <span *ngIf="comment.changed" class="comment-changed"
+                >changed</span
+              >
+            </div>
+            <div
+              *ngIf="!comment.editing"
+              class="comment-text"
+              [innerHTML]="comment.rendered"
+            ></div>
+            <div *ngIf="comment.editing" class="comment-edit-block">
+              <textarea
+                class="comment-edit-input"
+                [(ngModel)]="editingCommentText"
+                rows="2"
+              ></textarea>
+              <button
+                class="comment-edit-save"
+                (click)="saveEditComment(comment)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+              <button
+                class="comment-edit-cancel"
+                (click)="cancelEditComment(comment)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <button
+              *ngIf="comment.user === currentUser.name && !comment.editing"
+              class="comment-edit-btn"
+              (click)="startEditComment(comment)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="cancel-btn" (click)="closeAddTaskModal()">Отмена</button>
+        <button
+          class="create-btn"
+          [disabled]="!newTaskTitle.trim()"
+          (click)="editTaskMode ? saveEditedTask() : saveTask()"
+        >
+          Сохранить
+        </button>
+      </div>
+    </div>
+    <div class="modal-sidebar">
+      <div class="sidebar-title">Свойства</div>
+      <button
+        mat-icon-button
+        class="sidebar-btn"
+        *ngIf="!isJoined"
+        (click)="joinTask()"
+      >
+        <mat-icon>person_add</mat-icon>
+        <span>Присоединиться</span>
+      </button>
+      <button
+        mat-icon-button
+        class="sidebar-btn leave"
+        *ngIf="isJoined"
+        (click)="leaveTask()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Покинуть</span>
+      </button>
+      <button
+        mat-icon-button
+        class="sidebar-btn"
+        (click)="toggleLabelPicker($event)"
+      >
+        <mat-icon>label</mat-icon>
+        <span>Метки</span>
+      </button>
+      <div
+        class="label-picker"
+        *ngIf="showLabelPicker"
+        (click)="$event.stopPropagation()"
+        [ngStyle]="
+          labelPickerPos
+            ? { 'top.px': labelPickerPos.top, 'left.px': labelPickerPos.left }
+            : {}
+        "
+      >
+        <div class="label-picker-title">Выберите цвет метки:</div>
+        <div class="label-picker-colors">
+          <span
+            *ngFor="let color of labelColors"
+            class="label-picker-color"
+            [style.background]="color"
+            (click)="toggleLabelColor(color)"
+            [class.selected]="selectedLabelColors.includes(color)"
+          >
+            <span
+              class="label-checkmark"
+              *ngIf="selectedLabelColors.includes(color)"
+            >
+              <mat-icon style="font-size: 1.1rem">check</mat-icon>
+            </span>
+          </span>
+        </div>
+      </div>
+      <button
+        mat-icon-button
+        class="sidebar-btn"
+        (click)="toggleChecklistPicker($event)"
+      >
+        <mat-icon>checklist</mat-icon>
+        <span>Чек-лист</span>
+      </button>
+      <div
+        class="checklist-picker"
+        *ngIf="showChecklistPicker"
+        (click)="$event.stopPropagation()"
+        [ngStyle]="
+          checklistPickerPos
+            ? {
+                'top.px': checklistPickerPos.top,
+                'left.px': checklistPickerPos.left
+              }
+            : {}
+        "
+      >
+        <div class="checklist-picker-title">Название чек-листа:</div>
+        <input
+          class="checklist-picker-input"
+          [(ngModel)]="newChecklistTitle"
+          placeholder="Введите название"
+          (keydown.enter)="addChecklist()"
+        />
+        <button class="checklist-picker-btn" (click)="addChecklist()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <button
+        mat-icon-button
+        class="sidebar-btn"
+        (click)="toggleAttachmentPicker($event)"
+      >
+        <mat-icon>attach_file</mat-icon>
+        <span>Вложение</span>
+      </button>
+      <div
+        class="attachment-picker"
+        *ngIf="showAttachmentPicker"
+        (click)="$event.stopPropagation()"
+        [ngStyle]="
+          attachmentPickerPos
+            ? {
+                'top.px': attachmentPickerPos.top,
+                'left.px': attachmentPickerPos.left
+              }
+            : {}
+        "
+      >
+        <div class="attachment-picker-title">Вложение</div>
+        <label class="attachment-file-label">
+          Выбрать файл
+          <input
+            type="file"
+            (change)="onAttachmentSelected($event)"
+            multiple
+            class="attachment-input"
+          />
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

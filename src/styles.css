@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+* {
+    margin: 0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Корневой элемент делает flex-контейнер */
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Контейнер для контента, чтобы не было прокрутки */
+router-outlet, 
+app-header + router-outlet {
+  flex: 1;
+  overflow: hidden;
+}
+color {
+   color: #DCE94B;
+   color: #BEADF6;
+   color: #4787FF;
+}

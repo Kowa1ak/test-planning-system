@@ -1,0 +1,135 @@
+:host {
+    display: block;
+    background-color: #e0f7fa; /* базовый фон (можно изменить) */
+    min-height: 100vh;
+    padding-top: 80px; /* отступ для header */
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px); /* учитываем высоту header */
+  text-align: center;
+}
+
+.join-btn {
+  margin-top: 20px;
+  padding: 16px 62px; /* увеличенные отступы */
+  border: none;
+  border-radius: 50px;
+  background-color: #007BFF;
+  color: #fff;
+  font-size: 1.25rem;  /* увеличенный размер шрифта */
+  cursor: pointer;
+}
+
+/* Стили для интерфейса авторизованного пользователя */
+.auth-home-container {
+  display: flex;
+  flex-direction: column; /* изменено: выстраиваем элементы вертикально */
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* отступ между надписью и кнопкой */
+  height: calc(100vh - 80px);
+  background-color: #e0f7fa;
+}
+
+.create-board-btn {
+    height: 15%;   
+    width: 10%;
+  background-color: gray;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Стили для модального окна */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #333; /* темный фон */
+  color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  width: 25%; /* увеличенный модуль */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 15px;
+  z-index: 11;
+}
+
+.modal-content label {
+  font-size: 1.2rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background: #444;
+  box-sizing: border-box;
+  color: #fff;
+  /* ...existing code, без resize и min-height ... */
+}
+
+.modal-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background: #444;
+  box-sizing: border-box;
+  color: #fff;
+  resize: none; /* запрет изменения размера для textarea */
+  min-height: 120px; /* увеличение высоты для Description */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  padding: 12px 30px;
+  background: #555;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.create-btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  background: #777; /* изначально серая */
+}
+
+.create-btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Разблокировка кнопки, когда в поле name что-то введено */
+.create-btn:not([disabled]) {
+  background: #4787FF;
+}
