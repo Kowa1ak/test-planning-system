@@ -1,3 +1,4 @@
+<div class="board-bg-image"></div>
 <div class="board-container">
   <ng-container *ngFor="let col of columns">
     <div
@@ -111,7 +112,7 @@
       </div>
       <!-- Добавлено: Due Date -->
       <div class="due-date-section" style="position: relative">
-        <span class="due-date-title">Due Date:</span>
+        <span class="due-date-title">Дата выполнения:</span>
         <button
           class="date-picker-btn"
           type="button"
@@ -122,7 +123,7 @@
             {{
               newTaskDueDate
                 ? (newTaskDueDate | date : "dd.MM.yyyy")
-                : "Select Date"
+                : "Выбрать дату"
             }}
           </span>
         </button>

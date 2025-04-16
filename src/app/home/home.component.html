@@ -1,32 +1,67 @@
+<div class="home-bg-image"></div>
 <div *ngIf="!authorized; else authTemplate" class="home-container">
-  <h1>С НАМИ БУДУЩЕЕ</h1>
-  <button class="join-btn" (click)="onLogin()">Join</button>
-  <h2>Добро пожаловать на главную страницу!</h2>
+  <h1 class="home-title">С НАМИ БУДУЩЕЕ</h1>
+  <div class="home-motivation">
+    Вместе мы создаём будущее, где каждый проект становится успехом!
+  </div>
+  <button class="join-btn" (click)="onLogin()">Войти</button>
+  <div class="home-cards-row">
+    <div class="home-card">
+      <div class="home-card-number">100+</div>
+      <div class="home-card-desc">
+        Успешных проектов<br />с нашими инструментами
+      </div>
+    </div>
+    <div class="home-card">
+      <div class="home-card-number">24/7</div>
+      <div class="home-card-desc">Поддержка и<br />доступность всегда</div>
+    </div>
+    <div class="home-card">
+      <div class="home-card-number">1&nbsp;мин</div>
+      <div class="home-card-desc">Запуск проекта<br />за одну минуту</div>
+    </div>
+  </div>
 </div>
 
 <ng-template #authTemplate>
   <div class="auth-home-container">
-    <h2>YOUR WORKSPACES</h2>
-    <button class="create-board-btn" (click)="openModal()">Create Board</button>
+    <h2 class="auth-home-title">ВАШИ РАБОЧИЕ ПРОСТРАНСТВА</h2>
+    <div class="auth-home-desc">
+      Создайте новый проект, чтобы начать с нуля<br />
+      Откройте существующий проект
+    </div>
+    <button class="create-board-btn" (click)="openModal()">
+      <mat-icon class="big-plus-icon">add</mat-icon>
+    </button>
+    <div class="create-board-label">создать доску</div>
   </div>
 </ng-template>
 
 <!-- Модальное окно -->
 <div *ngIf="modalOpen" class="modal-overlay" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3>Create Board</h3>
-    <label>Name</label>
-    <input type="text" [(ngModel)]="boardName" class="modal-input" />
-    <label>Description</label>
-    <textarea [(ngModel)]="boardDescription" class="modal-textarea"></textarea>
+    <h3 class="modal-title">Создание проекта</h3>
+    <label for="boardName">Название</label>
+    <input
+      id="boardName"
+      type="text"
+      [(ngModel)]="boardName"
+      class="modal-input"
+    />
+    <label for="boardDescription">Описание</label>
+    <textarea
+      id="boardDescription"
+      [(ngModel)]="boardDescription"
+      class="modal-textarea"
+    ></textarea>
     <div class="modal-buttons">
-      <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+      <button class="cancel-btn" (click)="closeModal()">Отмена</button>
       <button
         class="create-btn"
         [disabled]="!boardName"
         (click)="createBoard()"
       >
-        Create
+        Создать
       </button>
     </div>
   </div>

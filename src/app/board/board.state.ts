@@ -48,11 +48,11 @@ export class BoardState extends BoardMembers {
     { key: 'done', label: 'Готово' },
   ];
   priorities = [
-    { key: 'LOWEST', label: 'Lowest' },
-    { key: 'LOW', label: 'Low' },
-    { key: 'MEDIUM', label: 'Medium' },
-    { key: 'HIGH', label: 'High' },
-    { key: 'HIGHEST', label: 'Highest' },
+    { key: 'LOWEST', label: 'Самый низкий' },
+    { key: 'LOW', label: 'Низкий' },
+    { key: 'MEDIUM', label: 'Средний' },
+    { key: 'HIGH', label: 'Высокий' },
+    { key: 'HIGHEST', label: 'Самый высокий' },
   ];
 
   dragPreviewElement: HTMLElement | null = null;

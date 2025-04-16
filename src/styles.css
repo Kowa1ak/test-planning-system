@@ -1,24 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 * {
     margin: 0;
 }
 
 html, body {
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
-/* Корневой элемент делает flex-контейнер */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 app-root {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-/* Контейнер для контента, чтобы не было прокрутки */
+
 router-outlet, 
 app-header + router-outlet {
   flex: 1;
@@ -28,4 +38,7 @@ color {
    color: #DCE94B;
    color: #BEADF6;
    color: #4787FF;
+   color: #DDE0E5;
+   color: #121F3C;
+   color: #C6CAD3;
 }

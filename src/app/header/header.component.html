@@ -2,8 +2,71 @@
   <div class="header-container">
     <div class="logo">LOGO</div>
     <div class="menu">
-      <span>Login</span>
-      <button class="register-btn">Register</button>
+      <button class="menu-link" (click)="goHome()">Главная</button>
+      <ng-container *ngIf="!authorized; else userMenu">
+        <button class="menu-link" (click)="goLogin()">Вход</button>
+        <button class="register-btn" (click)="goRegister()">Регистрация</button>
+      </ng-container>
+      <ng-template #userMenu>
+        <div
+          class="user-menu"
+          (click)="toggleSettingsMenu()"
+          style="cursor: pointer; position: relative"
+        >
+          <span class="user-avatar">
+            <mat-icon>person</mat-icon>
+          </span>
+          <span class="user-name">{{ userName }}</span>
+          <div
+            class="settings-dropdown"
+            *ngIf="settingsMenuOpen"
+            (click)="$event.stopPropagation()"
+          >
+            <form class="account-form-dropdown">
+              <label class="account-label" for="name">Имя</label>
+              <div class="account-field-row">
+                <input
+                  id="name"
+                  class="account-input"
+                  type="text"
+                  [(ngModel)]="name"
+                  name="name"
+                  placeholder="Ваше имя"
+                />
+              </div>
+              <label class="account-label" for="email">Email</label>
+              <div class="account-field-row">
+                <input
+                  id="email"
+                  class="account-input"
+                  type="email"
+                  [(ngModel)]="email"
+                  name="email"
+                  placeholder="Ваш email"
+                />
+              </div>
+              <label class="account-label" for="password">Новый пароль</label>
+              <div class="account-field-row">
+                <input
+                  id="password"
+                  class="account-input"
+                  type="password"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="Новый пароль"
+                />
+              </div>
+              <button
+                class="account-btn"
+                type="button"
+                (click)="saveSettings()"
+              >
+                Сохранить изменения
+              </button>
+            </form>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </header>

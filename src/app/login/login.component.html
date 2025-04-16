@@ -1,0 +1,39 @@
+<div class="fullscreen-bg">
+  <div class="background">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="login-center">
+    <div class="login-container">
+      <h2>Вход</h2>
+      <form (ngSubmit)="onSubmit($event)">
+        <label class="login-label" for="login">Логин</label>
+        <input
+          id="login"
+          class="login-input"
+          type="text"
+          placeholder="Логин"
+          [(ngModel)]="loginValue"
+          name="login"
+          required
+        />
+        <label class="login-label" for="password">Пароль</label>
+        <input
+          id="password"
+          class="login-input"
+          type="password"
+          placeholder="Пароль"
+          [(ngModel)]="passwordValue"
+          name="password"
+          required
+        />
+        <button class="login-btn" type="submit">Войти</button>
+        <div class="login-register-link">
+          Нет аккаунта?
+          <a href="/registration">Зарегистрироваться</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

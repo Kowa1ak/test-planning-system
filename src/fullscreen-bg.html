@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fullscreen Background</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .background {
+        position: absolute;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background-color: #85ffbd;
+        background-image: linear-gradient(45deg, #85ffbd 0%, #fffb7d 100%);
+        display: flex;
+        flex-grow: 1;
+        z-index: -1;
+      }
+      .background div {
+        position: absolute;
+        border-radius: 100%;
+        height: 0;
+        filter: blur(240vw);
+        opacity: 0.4;
+      }
+      .background div:nth-child(1) {
+        background-color: #fbab7e;
+        background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
+        width: 75%;
+        padding-top: 75%;
+        left: 0%;
+        top: 0%;
+        transform: translateX(-50%) translateY(-50%);
+      }
+      .background div:nth-child(2) {
+        background-color: #f4d03f;
+        background-image: linear-gradient(132deg, #f4d03f 0%, #16a085 100%);
+        width: 40%;
+        padding-top: 40%;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+      }
+      .background div:nth-child(3) {
+        background-color: #fbab7e;
+        background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
+        width: 74%;
+        padding-top: 74%;
+        left: 100%;
+        top: 100%;
+        transform: translateX(-50%) translateY(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+.fullscreen-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #85ffbd;
+  background-image: linear-gradient(45deg, #85ffbd 0%, #fffb7d 100%);
+  display: flex;
+  flex-grow: 1;
+  z-index: -1;
+}
+
+.background div {
+  position: absolute;
+  border-radius: 100%;
+  height: 0;
+  filter: blur(240vw);
+  opacity: 0.4;
+}
+
+.background div:nth-child(1) {
+  background-color: #fbab7e;
+  background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
+  width: 75%;
+  padding-top: 75%;
+  left: 0%;
+  top: 0%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.background div:nth-child(2) {
+  background-color: #f4d03f;
+  background-image: linear-gradient(132deg, #f4d03f 0%, #16a085 100%);
+  width: 40%;
+  padding-top: 40%;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.background div:nth-child(3) {
+  background-color: #fbab7e;
+  background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
+  width: 74%;
+  padding-top: 74%;
+  left: 100%;
+  top: 100%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.login-center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  padding-top: 0;
+}
+
+.login-container {
+  margin: 0;
+  width: 25%;
+  height: 40%;
+  background: rgba(220, 220, 220, 0.45); /* более серый и прозрачный */
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(16px); /* матовый эффект */
+  -webkit-backdrop-filter: blur(16px);
+  padding: 32px 44px;
+  text-align: center;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h2 {
+  color: #121F3C;
+  margin-bottom: 18px;
+}
+
+.login-label {
+  float: left;
+  align-self: stretch;
+  text-align: left;
+  margin-bottom: 10px;
+  margin-left: 0;
+  font-size: 1rem;
+  color: #121F3C;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border-radius: 15px;
+  border: 1.5px solid #121F3C;
+  background: none; /* прозрачный фон */
+  color: #121F3C;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 15px;
+  border: none;
+  background: #4787FF;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: center;
+}
+
+.login-btn:hover {
+  background: #121F3C;
+}
+
+.login-register-link {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #121F3C;
+  text-align: center;
+}
+.login-register-link a {
+  color: #4787FF;
+  text-decoration: none;
+  margin-left: 4px;
+  transition: color 0.15s;
+}
+.login-register-link a:hover {
+  color: #121F3C;
+}
