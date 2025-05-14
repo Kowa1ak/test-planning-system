@@ -7,7 +7,7 @@
   <div class="registration-center">
     <div class="registration-container">
       <h2>Регистрация</h2>
-      <form>
+      <form (ngSubmit)="onSubmit()">
         <label class="registration-label" for="username"
           >Имя пользователя</label
         >
@@ -16,6 +16,9 @@
           class="registration-input"
           type="text"
           placeholder="Имя пользователя"
+          [(ngModel)]="username"
+          name="username"
+          required
         />
         <label class="registration-label" for="email">Email</label>
         <input
@@ -23,6 +26,9 @@
           class="registration-input"
           type="email"
           placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
+          required
         />
         <label class="registration-label" for="password">Пароль</label>
         <input
@@ -30,6 +36,9 @@
           class="registration-input"
           type="password"
           placeholder="Пароль"
+          [(ngModel)]="password"
+          name="password"
+          required
         />
         <label class="registration-label" for="confirmPassword"
           >Повторите пароль</label
@@ -39,8 +48,15 @@
           class="registration-input"
           type="password"
           placeholder="Повторите пароль"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
         />
-        <button class="registration-btn" type="submit">
+        <button
+          class="registration-btn"
+          type="submit"
+          [disabled]="!username || !email || !password || !confirmPassword"
+        >
           Зарегистрироваться
         </button>
         <div class="registration-login-link">
@@ -49,5 +65,28 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+
+<div
+  *ngIf="isConfirmModalOpen"
+  class="modal-overlay-confirm"
+  (click)="isConfirmModalOpen = false"
+>
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <mat-icon class="confirm-icon">mail</mat-icon>
+    <h3>Подтверждение Email</h3>
+    <p>
+      Письмо отправлено на <span class="highlight">{{ email }}</span
+      >. Перейдите по ссылке в письме для завершения регистрации.
+    </p>
+    <button
+      class="resend-btn"
+      type="button"
+      [disabled]="resendDisabled"
+      (click)="resendEmail()"
+    >
+      {{ resendDisabled ? countdown + " секунд" : "Отправить заново" }}
+    </button>
   </div>
 </div>

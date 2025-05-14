@@ -143,3 +143,69 @@ h2 {
 .registration-login-link a:hover {
   color: #121F3C;
 }
+
+.modal-overlay-confirm {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.confirm-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+.confirm-modal mat-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.confirm-icon {
+  font-size: 48px;
+  color: #4787ff;
+  margin-bottom: 12px;
+}
+
+.confirm-modal h3 {
+  margin: 8px 0 16px;
+  color: #121f3c;
+}
+
+.confirm-modal p {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.confirm-modal .highlight {
+  color: #4787ff;
+  font-weight: 600;
+}
+
+.resend-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #4787ff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.resend-btn[disabled] {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.resend-btn:not([disabled]):hover {
+  background: #121f3c;
+}
